@@ -1,4 +1,4 @@
-// 03.条件声明
+// 3.3.2 条件声明
 /*
    更新:翻译是外包的吗? sometimes我这个三把刀都觉得难以下咽.
    在使用var声明变量时,由于声明会提升,JavaScript会自动将多余的声明在顶部合并为一个声明.
@@ -54,3 +54,46 @@ for(let n in obj){
     setTimeout(()=>console.log(obj[n]), 0)
 }
 // console.log 1,2,3,4
+
+// 3.3.3 const
+// 01. it must be initialized with a value, and that value can't be redefined after declarationReact.Component
+
+const age = 26;
+age = 36; //TypeError: assignment to a constant
+
+// const still disallows redundant declaration
+const name = 'Matt';
+const name = "Nicholas"; //SyntaxError
+
+// const is still scoped to blocks
+const name = 'Matt';
+if(true){
+    const name = 'Nicholas';
+}
+console.log(name); //Matt
+
+// the const declaration is only enforced with respect to reference to the variable that it points to. If a const variable references an object,it does not violate the const constraints to modify properties inside that object.
+    const person = {};
+    person.name = 'Matt'; // ok
+
+// u can't use const to declare for loop iterators
+    for(const i=0; i<10; i++){} //TypeError: assignment to constant variable
+
+// u can declare a for loop variable that is not modified with const, this is especially relevant in the case of for-of and for-in loop.
+    let i=0;
+    for(const j=7; i<5; i++){
+        console.log(j)
+    } //7,7,7,7,7
+
+    for(const key in {a:1, b:2}){
+        console.log(key);
+    } // a,b
+
+    for(const value of [1,2,3,4,5]){
+        console.log(value);
+    } //1,2,3,4,5
+
+// 3.3.4 declaration style and best practices
+// 01. don't use var 
+
+// 02. prefer const over let
