@@ -131,5 +131,95 @@ LESS(http://lesscss.org)
 
 
 
+## 第二章 背景与边框
+
+### 一.半透明边框
+
+在其他属性（比如边框）中使用半透明颜色并没有想像中那么容易。
+
+假设我们想给一个容器设置一层白色背景和一道半透明白色边框,body的背景会从它的半透明边框透上来。我们最开始的尝试可能是这样的.
+
+```css
+border: 10px solid hsla(0,0%,100%,.5);
+background: white;
+```
+
+解决: 通过background-clip属性来调整,初始值是border-box，意味着背景会被元素的border box（边框的外沿框）裁切掉. 如果不希望背景侵入边框所在的范围，我们要做的就是把它的值设为padding-box.
+
+```css
+border: 10px solid hsla(0,0%,100%,.5);
+background: white;
+background-clip: padding-box;
+```
+
+<iframe height="265" style="width: 100%;" scrolling="no" title="半透明边框" src="https://codepen.io/westover/embed/mdWoNOw?height=265&theme-id=light&default-tab=css,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/westover/pen/mdWoNOw'>半透明边框</a> by xxl
+  (<a href='https://codepen.io/westover'>@westover</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
 
 
+
+
+
+
+
+### 二.多重边框
+
+#### 1.box-shadow
+
+作用: 1.生成投影; 2.生成边框
+
+box-shadow还接受第四个参数（称作“扩张半径”），通过指定正值或负值，可以让投影面积加大或者减小。一个正值的扩张半径加上两个为零的偏移量以及为零的模糊值，得到的“投影”其实就像一道实线边框
+
+```css
+background: lightblue;
+box-shadow: 0 0 0 10px #655;
+```
+
+<iframe height="265" style="width: 100%;" scrolling="no" title="box-shadow" src="https://codepen.io/westover/embed/KKWEOrL?height=265&theme-id=light&default-tab=css,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/westover/pen/KKWEOrL'>box-shadow</a> by xxl
+  (<a href='https://codepen.io/westover'>@westover</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
+
+以上可以使用border实现同样的边框效果, box-shadow的好处在于，它支持逗号分隔语法，我们可以创建任意数量的投影.在上面的示例中再加上一道[插图]deeppink颜色的“边框”.
+
+box-shadow是层层叠加的，第一层投影位于最顶层，依次类推。因此,想在外圈再加一道5px的外框，那就需要指定扩张半径的值为15px（10px+5px).
+
+
+
+**注意事项**
+
+* 不会影响布局，而且也不会受到box-sizing属性的影响。不过，你还是可以通过内边距或外边距（这取决于投影是内嵌和还是外扩的）来额外模拟出边框所需要占据的空间
+* 上述方法所创建出的假“边框”出现在元素的外圈。它们并不会响应鼠标事件，比如悬停或点击.上述方法所创建出的假“边框”出现在元素的外圈。它们并不会响应鼠标事件，比如悬停或点击. 
+
+
+
+#### 2.outline
+
+在某些情况下，你可能只需要两层边框，那就可以先设置一层常规边框，再加上outline（描边）属性来产生外层的边框
+
+**好处**
+
+1. box-shadow方案只能模拟实线边框（假设我们需要产生虚线边框效果，box-shadow就没辙了)
+2. 通过outline-offset属性来控制它跟元素边缘之间的间距，这个属性甚至可以接受负值
+
+<iframe height="265" style="width: 100%;" scrolling="no" title="outline-offset" src="https://codepen.io/westover/embed/rNybBVL?height=265&theme-id=light&default-tab=css,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/westover/pen/rNybBVL'>outline-offset</a> by xxl
+  (<a href='https://codepen.io/westover'>@westover</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
+
+使用outline实现上面box-shadow效果
+
+```css
+background: lightblue;
+border: 10px solid #655;
+outline: 5px solid deeppink;
+```
+
+
+
+**注意事项**
+
+* 它只适用于双层“边框”的场景，因为outline并不能接受用逗号分隔的多个值
+* 边框不一定会贴合border-radius属性产生的圆角，因此如果元素是圆角的，它的描边可能还是直角的. 未来可能修复.
+* 如果你想使用这个方法，请切记：最好在不同浏览器中完整地测试最终效果
